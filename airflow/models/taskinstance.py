@@ -54,6 +54,7 @@ from airflow.ti_deps.dep_context import DepContext, QUEUE_DEPS, RUN_DEPS
 from airflow.utils import timezone
 from airflow.utils.db import provide_session
 from airflow.utils.email import send_email
+from airflow.utils.larkbot import larkbot_msg_sender
 from airflow.utils.helpers import is_container
 from airflow.utils.log.logging_mixin import LoggingMixin
 from airflow.utils.net import get_hostname
@@ -1070,6 +1071,10 @@ class TaskInstance(Base, LoggingMixin):
                 self.log.info('Marking task as UP_FOR_RETRY')
                 if task.email_on_retry and task.email:
                     self.email_alert(error)
+                if task.lark_on_retry:
+                    exception_html = str(error).replace('\n', '')
+                    larkbot_msg_sender(exception_html)
+
             else:
                 self.state = State.FAILED
                 if task.retries:
@@ -1078,6 +1083,11 @@ class TaskInstance(Base, LoggingMixin):
                     self.log.info('Marking task as FAILED.')
                 if task.email_on_failure and task.email:
                     self.email_alert(error)
+                if task.lark_on_failure:
+                    exception_html = str(error).replace('\n', '')
+                    larkbot_msg_sender(exception_html)
+
+
         except Exception as e2:
             self.log.error('Failed to send email to: %s', task.email)
             self.log.exception(e2)
