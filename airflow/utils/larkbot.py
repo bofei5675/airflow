@@ -1,13 +1,5 @@
-from past.builtins import basestring
-
 import importlib
 import os
-import smtplib
-
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from email.mime.application import MIMEApplication
-from email.utils import formatdate
 
 from airflow import configuration
 from airflow.exceptions import AirflowConfigException
