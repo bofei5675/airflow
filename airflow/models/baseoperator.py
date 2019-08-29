@@ -266,6 +266,8 @@ class BaseOperator(LoggingMixin):
         email=None,  # type: Optional[str]
         email_on_retry=True,  # type: bool
         email_on_failure=True,  # type: bool
+        lark_on_retry=True,  # type: bool
+        lark_on_failure=True,  # type: bool
         retries=0,  # type: int
         retry_delay=timedelta(seconds=300),  # type: timedelta
         retry_exponential_backoff=False,  # type: bool
@@ -316,7 +318,9 @@ class BaseOperator(LoggingMixin):
         self.email = email
         self.email_on_retry = email_on_retry
         self.email_on_failure = email_on_failure
-
+        # add params
+        self.lark_on_retry = lark_on_retry
+        self.lark_on_failure = lark_on_failure
         self.start_date = start_date
         if start_date and not isinstance(start_date, datetime):
             self.log.warning("start_date for %s isn't datetime.datetime", self)

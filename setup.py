@@ -454,7 +454,7 @@ def do_setup():
             'compile_assets': CompileAssets
         },
         test_suite='setup.airflow_test_suite',
-        python_requires='>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*',
+        python_requires='>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*'
     )
 
 
