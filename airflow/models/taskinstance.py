@@ -1072,9 +1072,7 @@ class TaskInstance(Base, LoggingMixin):
                 if task.email_on_retry and task.email:
                     self.email_alert(error)
                 if task.lark_on_retry:
-                    exception_html = str(error).replace('\n', '')
-                    larkbot_msg_sender(exception_html)
-
+                    self.lark_alert(error)
             else:
                 self.state = State.FAILED
                 if task.retries:
@@ -1084,8 +1082,7 @@ class TaskInstance(Base, LoggingMixin):
                 if task.email_on_failure and task.email:
                     self.email_alert(error)
                 if task.lark_on_failure:
-                    exception_html = str(error).replace('\n', '')
-                    larkbot_msg_sender(exception_html)
+                    self.lark_alert(error)
 
 
         except Exception as e2:
@@ -1273,7 +1270,11 @@ class TaskInstance(Base, LoggingMixin):
             if content:
                 rendered_content = rt(attr, content, context)
                 setattr(task, attr, rendered_content)
-
+    def lark_alert(self, exception):
+        exception_html = str(exception).replace('\n','')
+        msg = 'Airflow Alert: Job {}, Try {} out of {}.\nException: {}'\
+            .format(self.task_id,self.try_number - 1,self.max_tries, exception_html)
+        larkbot_msg_sender(msg)
     def email_alert(self, exception):
         exception_html = str(exception).replace('\n', '<br>')
         jinja_context = self.get_template_context()
