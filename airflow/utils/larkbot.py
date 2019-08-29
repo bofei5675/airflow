@@ -35,7 +35,6 @@ def larkbot_msg_sender(msg):
         }
     }
     code = requests.post(sender_api, json = data, headers = header)
-
 def larkbot_backend(msg):
     path, attr = configuration.conf.get('lark', 'LARKBOT_BACKEND')
     # 在上下文中注册这个机器人 函数
